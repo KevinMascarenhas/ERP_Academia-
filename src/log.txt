@@ -1,0 +1,21 @@
+[2026-04-16 12:20:52] kevin@gmail.com - Login realizado (Aluno)
+[2026-04-16 12:22:51] maria@academia.com - Login realizado (Funcionário)
+[2026-04-16 12:28:51] SISTEMA - Registro de pagamento: João Silva - 04/2026 - R$ 89.90
+[2026-04-16 12:46:04] maria@academia.com - Login realizado (Funcionário)
+[2026-04-16 12:46:40] SISTEMA - Registro de pagamento: João Silva - 04/2026 - R$ 89.90
+[2026-04-16 12:55:42] maria@academia.com - Login realizado (Funcionário)
+[2026-04-16 12:56:24] admin@academia.com - Login realizado (Administrador)
+[2026-04-16 13:12:46] admin@academia.com - Login realizado (Administrador)
+[2026-04-16 14:22:37] maria@academia.com - Login realizado (Funcionário)
+[2026-04-16 14:23:08] SISTEMA - Registro de pagamento: João Silva - 04/2026 - R$ 89.90
+[2026-04-16 14:23:32] SISTEMA - Pagamento confirmado: João Silva - 04/2026
+[2026-04-16 14:27:30] admin@academia.com - Login realizado (Administrador)
+[2026-04-16 14:29:25] maria@academia.com - Login realizado (Funcionário)
+[2026-04-16 14:59:44] maria@academia.com - Login realizado (Funcionário)
+[2026-04-16 15:00:27] SISTEMA - Registro de pagamento: João Silva - 04/2026 - R$ 89.90
+[2026-04-16 15:00:40] SISTEMA - Pagamento confirmado: João Silva - 04/2026
+[2026-04-16 15:01:12] João Silva - Registro de freqüência: Musculação em 16/04/2026 15:30
+[2026-04-16 15:30:29] admin@academia.com - Login realizado (Administrador)
+[2026-04-16 19:32:05] admin@academia.com - Login realizado (Administrador)
+[2026-04-16 20:37:24] admin@academia.com - Login realizado (Administrador)
+[2026-04-16 20:40:03] joao@email.com - Login realizado (Aluno)
