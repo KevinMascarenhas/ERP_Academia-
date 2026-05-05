@@ -1,7 +1,24 @@
 # Controlador principal da CLI. Orquestra o fluxo da aplicação: autenticação, menu principal, e roteamento para funcionalidades por tipo de usuário.
+import sys
+import os
+import sys
+import os
+
+# Garante que a raiz do src está no path, independente de onde o script é chamado
+_src = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
+if _src not in sys.path:
+    sys.path.insert(0, _src)
 
 # Infrastructure
-from infrastructure.repositories.in_memory import *
+from infrastructure.repositories.UsuarioRepository import UsuarioRepository
+from infrastructure.repositories.AdminRepository import AdminRepository
+from infrastructure.repositories.AlunoRepository import AlunoRepository
+from infrastructure.repositories.PlanoRepository import PlanoRepository
+from infrastructure.repositories.ModalidadeRepository import ModalidadeRepository 
+from infrastructure.repositories.FuncionarioRepository import FuncionarioRepository
+from infrastructure.repositories.PagamentoRepository import PagamentoRepository
+
+
 from infrastructure.database.seed import *
 from infrastructure.logging import Logger
 
