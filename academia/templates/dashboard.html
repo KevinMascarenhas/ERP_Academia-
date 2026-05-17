@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard — Academia</title>
+</head>
+<body>
+    <h2>Bem-vindo, {{ usuario.nome }}!</h2>
+    <p>Perfil: {{ usuario.perfil }}</p>
+    <a href="{% url 'logout' %}">Sair</a>
+</body>
+</html>

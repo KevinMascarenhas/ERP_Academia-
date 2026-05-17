@@ -1,5 +1,9 @@
 from django.contrib import admin
-from .models import Usuario, Administrador, Funcionario, Aluno, Plano, Modalidade, Inscricao, Frequencia, Treino, Pagamento
+from .models import Usuario, Administrador, Funcionario, Aluno
+from planos.models import Plano
+from modalidades.models import Modalidade, Inscricao, Frequencia
+from treinos.models import Treino
+from pagamentos.models import Pagamento
 
 admin.site.register(Usuario)
 admin.site.register(Administrador)
