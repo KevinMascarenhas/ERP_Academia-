@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Planos — Academia</title>
+</head>
+<body>
+    <h2>Planos</h2>
+    <p><a href="{% url 'dashboard' %}">Dashboard</a> | <a href="{% url 'criar_plano' %}">Criar plano</a></p>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Nome</th>
+            <th>Preco</th>
+            <th>Modalidades</th>
+            <th>Duracao</th>
+            <th>Acoes</th>
+        </tr>
+        {% for plano in planos %}
+            <tr>
+                <td>{{ plano.nome_plano }}</td>
+                <td>R$ {{ plano.preco }}</td>
+                <td>{{ plano.modalidades_inclusas }}</td>
+                <td>{{ plano.duracao_meses }} meses</td>
+                <td>
+                    <a href="{% url 'editar_plano' plano.id_plano %}">Editar</a>
+                    <form method="post" action="{% url 'excluir_plano' plano.id_plano %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">Nenhum plano cadastrado.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

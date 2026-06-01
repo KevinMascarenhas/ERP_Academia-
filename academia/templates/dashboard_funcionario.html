@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Funcionario — Academia</title>
+</head>
+<body>
+    <h2>Bem-vindo, {{ usuario.nome }}!</h2>
+    <p>Perfil: {{ usuario.perfil }}</p>
+
+    <h3>Area do funcionario</h3>
+    <ul>
+        <li><a href="{% url 'listar_modalidades' %}">Modalidades</a></li>
+        <li><a href="{% url 'listar_treinos' %}">Treinos</a></li>
+        <li><a href="{% url 'listar_pagamentos' %}">Pagamentos</a></li>
+    </ul>
+
+    <a href="{% url 'logout' %}">Sair</a>
+</body>
+</html>

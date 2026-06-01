@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Pagamentos — Academia</title>
+</head>
+<body>
+    <h2>Pagamentos</h2>
+    <p><a href="{% url 'dashboard' %}">Dashboard</a> | <a href="{% url 'criar_pagamento' %}">Criar pagamento</a></p>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Aluno</th>
+            <th>Valor</th>
+            <th>Mes/Ano</th>
+            <th>Status</th>
+            <th>Acoes</th>
+        </tr>
+        {% for pagamento in pagamentos %}
+            <tr>
+                <td>{{ pagamento.aluno.nome }}</td>
+                <td>R$ {{ pagamento.valor }}</td>
+                <td>{{ pagamento.mes_ano }}</td>
+                <td>{{ pagamento.status }}</td>
+                <td>
+                    <a href="{% url 'editar_pagamento' pagamento.id %}">Editar</a>
+                    <form method="post" action="{% url 'excluir_pagamento' pagamento.id %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">Nenhum pagamento cadastrado.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Treinos — Academia</title>
+</head>
+<body>
+    <h2>Treinos</h2>
+    <p><a href="{% url 'dashboard' %}">Dashboard</a> | <a href="{% url 'criar_treino' %}">Criar treino</a></p>
+
+    <table border="1" cellpadding="6">
+        <tr>
+            <th>Nome</th>
+            <th>Aluno</th>
+            <th>Grupo</th>
+            <th>Data</th>
+            <th>Acoes</th>
+        </tr>
+        {% for treino in treinos %}
+            <tr>
+                <td>{{ treino.nome_treino }}</td>
+                <td>{{ treino.aluno.nome }}</td>
+                <td>{{ treino.grupo_muscular }}</td>
+                <td>{{ treino.data }}</td>
+                <td>
+                    <a href="{% url 'editar_treino' treino.id_treino %}">Editar</a>
+                    <form method="post" action="{% url 'excluir_treino' treino.id_treino %}" style="display:inline">
+                        {% csrf_token %}
+                        <button type="submit">Excluir</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr><td colspan="5">Nenhum treino cadastrado.</td></tr>
+        {% endfor %}
+    </table>
+</body>
+</html>

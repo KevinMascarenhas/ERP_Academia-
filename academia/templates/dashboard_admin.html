@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Dashboard Admin — Academia</title>
+</head>
+<body>
+    <h2>Bem-vindo, {{ usuario.nome }}!</h2>
+    <p>Perfil: {{ usuario.perfil }}</p>
+
+    <h3>Area administrativa</h3>
+    <ul>
+        <li><a href="{% url 'listar_planos' %}">Planos</a></li>
+        <li><a href="{% url 'listar_modalidades' %}">Modalidades</a></li>
+        <li><a href="{% url 'listar_treinos' %}">Treinos</a></li>
+        <li><a href="{% url 'listar_pagamentos' %}">Pagamentos</a></li>
+        <li><a href="{% url 'admin:index' %}">Admin Django</a></li>
+    </ul>
+
+    <a href="{% url 'logout' %}">Sair</a>
+</body>
+</html>

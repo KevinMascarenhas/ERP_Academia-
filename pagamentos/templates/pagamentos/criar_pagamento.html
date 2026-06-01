@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar pagamento — Academia</title>
+</head>
+<body>
+    <h2>Criar pagamento</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><label>ID do aluno: <input type="number" name="aluno_id" required></label></p>
+        <p><label>Valor: <input type="number" step="0.01" name="valor" required></label></p>
+        <p><label>Mes/Ano: <input type="text" name="mes_ano" placeholder="MM/AAAA" required></label></p>
+        <p>
+            <label>Status:
+                <select name="status">
+                    <option value="pendente">Pendente</option>
+                    <option value="pago">Pago</option>
+                    <option value="atrasado">Atrasado</option>
+                </select>
+            </label>
+        </p>
+        <button type="submit">Salvar</button>
+    </form>
+    <p><a href="{% url 'listar_pagamentos' %}">Voltar</a></p>
+</body>
+</html>

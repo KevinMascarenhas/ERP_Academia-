@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from django.contrib.auth.decorators import login_required, require_http_methods, require_GET, require_POST
-from academia.models import perfil_required
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods, require_GET, require_POST
+from academia.views import perfil_required
 from .models import Plano 
 
 @login_required(login_url="login")

@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Criar modalidade — Academia</title>
+</head>
+<body>
+    <h2>Criar modalidade</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><label>Nome: <input type="text" name="modalidade_nome" required></label></p>
+        <p><label>Categoria: <input type="text" name="categoria" required></label></p>
+        <p><label>Horario: <input type="text" name="horario" placeholder="HH:MM" required></label></p>
+        <p><label>Dias da semana: <input type="text" name="dias_semana" placeholder='["Segunda", "Quarta"]'></label></p>
+        <button type="submit">Salvar</button>
+    </form>
+    <p><a href="{% url 'listar_modalidades' %}">Voltar</a></p>
+</body>
+</html>

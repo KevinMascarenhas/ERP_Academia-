@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar treino — Academia</title>
+</head>
+<body>
+    <h2>Editar treino</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><label>Nome: <input type="text" name="nome_treino" value="{{ treino.nome_treino }}" required></label></p>
+        <p><label>Descricao: <textarea name="descricao" required>{{ treino.descricao }}</textarea></label></p>
+        <p><label>ID do aluno: <input type="number" name="aluno_id" value="{{ treino.aluno_id }}" required></label></p>
+        <p><label>Grupo muscular: <input type="text" name="grupo_muscular" value="{{ treino.grupo_muscular }}" required></label></p>
+        <p><label>Exercicios: <input type="text" name="exercicios" value="{{ treino.exercicios }}"></label></p>
+        <p><label>Series: <input type="number" name="series" value="{{ treino.series }}" required></label></p>
+        <p><label>Repeticoes: <input type="number" name="repeticoes" value="{{ treino.repeticoes }}" required></label></p>
+        <p><label>Data: <input type="date" name="data" value="{{ treino.data|date:'Y-m-d' }}" required></label></p>
+        <button type="submit">Salvar</button>
+    </form>
+    <p><a href="{% url 'listar_treinos' %}">Voltar</a></p>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar pagamento — Academia</title>
+</head>
+<body>
+    <h2>Editar pagamento</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><label>ID do aluno: <input type="number" name="aluno_id" value="{{ pagamento.aluno_id }}" required></label></p>
+        <p><label>Valor: <input type="number" step="0.01" name="valor" value="{{ pagamento.valor }}" required></label></p>
+        <p><label>Mes/Ano: <input type="text" name="mes_ano" value="{{ pagamento.mes_ano }}" required></label></p>
+        <p>
+            <label>Status:
+                <select name="status">
+                    <option value="pendente" {% if pagamento.status == "pendente" %}selected{% endif %}>Pendente</option>
+                    <option value="pago" {% if pagamento.status == "pago" %}selected{% endif %}>Pago</option>
+                    <option value="atrasado" {% if pagamento.status == "atrasado" %}selected{% endif %}>Atrasado</option>
+                </select>
+            </label>
+        </p>
+        <button type="submit">Salvar</button>
+    </form>
+    <p><a href="{% url 'listar_pagamentos' %}">Voltar</a></p>
+</body>
+</html>

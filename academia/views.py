@@ -49,11 +49,11 @@ def logout_view(request):
 def dashboard_view(request):
     perfil = request.user.perfil
     if perfil == "Administrador":
-        return render(request, "dashboard_admin.html")
+        return render(request, "dashboard_admin.html", {"usuario": request.user})
     elif perfil == "Funcionário":
-        return render(request, "dashboard_funcionario.html")
+        return render(request, "dashboard_funcionario.html", {"usuario": request.user})
     elif perfil == "Aluno":
-        return render(request, "dashboard_aluno.html")
+        return render(request, "dashboard_aluno.html", {"usuario": request.user})
     return redirect("login")
 
 def acesso_negado_view(request):

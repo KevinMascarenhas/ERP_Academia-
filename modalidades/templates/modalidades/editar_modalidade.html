@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar modalidade — Academia</title>
+</head>
+<body>
+    <h2>Editar modalidade</h2>
+    <form method="post">
+        {% csrf_token %}
+        <p><label>Nome: <input type="text" name="modalidade_nome" value="{{ modalidade.modalidade_nome }}" required></label></p>
+        <p><label>Categoria: <input type="text" name="categoria" value="{{ modalidade.categoria }}" required></label></p>
+        <p><label>Horario: <input type="text" name="horario" value="{{ modalidade.horario }}" required></label></p>
+        <p><label>Dias da semana: <input type="text" name="dias_semana" value="{{ modalidade.dias_semana }}"></label></p>
+        <button type="submit">Salvar</button>
+    </form>
+    <p><a href="{% url 'listar_modalidades' %}">Voltar</a></p>
+</body>
+</html>
