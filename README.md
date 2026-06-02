@@ -39,7 +39,7 @@ API para gerenciamento de academia com autenticação JWT, controle de usuários
 
 ```bash
 git clone <url-do-seu-repositorio>
-cd "tde POO"
+cd "<sua-pasta>"
 ```
 
 ### 2) Crie e ative o ambiente virtual
