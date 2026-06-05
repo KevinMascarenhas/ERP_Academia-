@@ -38,7 +38,7 @@ API para gerenciamento de academia com autenticação JWT, controle de usuários
 ### 1) Clone e acesse o projeto
 
 ```bash
-git clone <url-do-seu-repositorio>
+git clone <https://github.com/KevinMascarenhas/ERP_Academia-/tree/feat/rest-api-jwt-auth>
 cd "<sua-pasta>"
 ```
 
