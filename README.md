@@ -39,7 +39,7 @@ API para gerenciamento de academia com autenticação JWT, controle de usuários
 
 ```bash
 git clone <url-do-seu-repositorio>
-cd "tde POO"
+cd "<nome-da-pasta>"
 ```
 
 ### 2) Crie e ative o ambiente virtual
@@ -183,6 +183,8 @@ Base URL local: `http://127.0.0.1:8000`
 - `GET/PUT/PATCH/DELETE /api/modalidades/{id}/`
 - `GET/POST /api/modalidades/inscricoes/`
 - `GET/PUT/PATCH/DELETE /api/modalidades/inscricoes/{id}/`
+- `POST /api/modalidades/inscricoes/{id}/confirmar/`
+- `POST /api/modalidades/inscricoes/{id}/cancelar/`
 - `GET/POST /api/modalidades/frequencias/`
 - `GET/PUT/PATCH/DELETE /api/modalidades/frequencias/{id}/`
 
@@ -190,11 +192,14 @@ Base URL local: `http://127.0.0.1:8000`
 
 - `GET/POST /api/treinos/`
 - `GET/PUT/PATCH/DELETE /api/treinos/{id_treino}/`
+- `GET /api/treinos/sugerir/?grupo=Peito`
 
 ### Pagamentos
 
 - `GET/POST /api/pagamentos/`
 - `GET/PUT/PATCH/DELETE /api/pagamentos/{id}/`
+- `POST /api/pagamentos/{id}/pagar/`
+- `POST /api/pagamentos/{id}/atrasar/`
 
 ## Interface administrativa do Django
 

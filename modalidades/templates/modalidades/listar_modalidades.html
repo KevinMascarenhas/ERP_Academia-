@@ -1,38 +1,90 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Modalidades — Academia</title>
-</head>
-<body>
-    <h2>Modalidades</h2>
-    <p><a href="{% url 'dashboard' %}">Dashboard</a> | <a href="{% url 'criar_modalidade' %}">Criar modalidade</a></p>
+{% extends "base.html" %}
 
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>Nome</th>
-            <th>Categoria</th>
-            <th>Horario</th>
-            <th>Dias</th>
-            <th>Acoes</th>
-        </tr>
-        {% for modalidade in modalidades %}
-            <tr>
-                <td>{{ modalidade.modalidade_nome }}</td>
-                <td>{{ modalidade.categoria }}</td>
-                <td>{{ modalidade.horario }}</td>
-                <td>{{ modalidade.dias_semana }}</td>
-                <td>
-                    <a href="{% url 'editar_modalidade' modalidade.id %}">Editar</a>
-                    <form method="post" action="{% url 'excluir_modalidade' modalidade.id %}" style="display:inline">
-                        {% csrf_token %}
-                        <button type="submit">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="5">Nenhuma modalidade cadastrada.</td></tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% block title %}Modalidades | Academia Fit{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Modalidades</h2>
+            <p class="section-subtitle">
+                {% if pode_registrar %}
+                    Escolha suas modalidades respeitando o limite do seu plano.
+                {% else %}
+                    Gerenciamento das modalidades da academia.
+                {% endif %}
+            </p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Dashboard</a>
+            {% if pode_gerenciar %}
+                <a href="{% url 'criar_modalidade' %}" class="btn btn-success">Nova modalidade</a>
+            {% endif %}
+        </div>
+    </div>
+
+    {% if pode_registrar %}
+        <div class="form-card mb-4">
+            <h4 class="mb-2">Meu limite de modalidades</h4>
+            {% if aluno and aluno.plano %}
+                <p class="mb-0">Plano: <strong>{{ aluno.plano.nome_plano }}</strong> | Registradas: <strong>{{ total_registradas }}</strong> de <strong>{{ limite_modalidades }}</strong></p>
+            {% else %}
+                <p class="mb-0 text-muted">Você ainda não possui um plano vinculado, então não pode registrar modalidades.</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Nome</th>
+                        <th>Categoria</th>
+                        <th>Horário</th>
+                        <th>Dias</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for modalidade in modalidades %}
+                        <tr>
+                            <td>{{ modalidade.modalidade_nome }}</td>
+                            <td>{{ modalidade.categoria }}</td>
+                            <td>{{ modalidade.horario }}</td>
+                            <td>{{ modalidade.dias_display }}</td>
+                            <td>
+                                {% if pode_gerenciar %}
+                                    <a href="{% url 'editar_modalidade' modalidade.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
+                                    <form method="post" action="{% url 'excluir_modalidade' modalidade.id %}" class="action-inline" data-confirm-delete="true">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                    </form>
+                                {% elif pode_registrar %}
+                                    {% if modalidade.id in registradas_ids %}
+                                        <form method="post" action="{% url 'cancelar_registro_modalidade' modalidade.id %}" class="action-inline" data-confirm-delete="true">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar registro</button>
+                                        </form>
+                                    {% else %}
+                                        <form method="post" action="{% url 'registrar_modalidade' modalidade.id %}" class="action-inline">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-primary btn-sm">Registrar</button>
+                                        </form>
+                                    {% endif %}
+                                {% else %}
+                                    <span class="text-muted">Somente visualização</span>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">Nenhuma modalidade cadastrada.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

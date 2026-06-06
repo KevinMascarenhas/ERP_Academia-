@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Criar Pagamento | Academia Fit{% endblock %}
+{% block title %}Criar Frequencia | Academia Fit{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
     <div class="page-header">
         <div>
-            <h2>Criar pagamento</h2>
-            <p class="section-subtitle">Cadastre um novo pagamento.</p>
+            <h2>Nova frequencia</h2>
+            <p class="section-subtitle">Registre a presença do aluno na modalidade.</p>
         </div>
-        <a href="{% url 'listar_pagamentos' %}" class="btn btn-outline-secondary">Voltar</a>
+        <a href="{% url 'listar_frequencias' %}" class="btn btn-outline-secondary">Voltar</a>
     </div>
 
     <div class="form-card">
@@ -25,20 +25,20 @@
                     </select>
                 </div>
                 <div class="col-md-6">
-                    <label class="form-label">Valor</label>
-                    <input type="number" step="0.01" name="valor" class="form-control" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Mes/Ano</label>
-                    <input type="text" name="mes_ano" class="form-control" placeholder="MM/AAAA" required>
-                </div>
-                <div class="col-md-6">
-                    <label class="form-label">Status</label>
-                    <select name="status" class="form-select">
-                        <option value="pendente">Pendente</option>
-                        <option value="pago">Pago</option>
-                        <option value="atrasado">Atrasado</option>
+                    <label class="form-label">Modalidade</label>
+                    <select name="modalidade_id" class="form-select" required>
+                        {% for modalidade in modalidades %}
+                            <option value="{{ modalidade.id }}">{{ modalidade.modalidade_nome }}</option>
+                        {% endfor %}
                     </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Data</label>
+                    <input type="date" name="data" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Hora</label>
+                    <input type="time" name="hora" class="form-control">
                 </div>
             </div>
             <button type="submit" class="btn btn-primary mt-4">Salvar</button>

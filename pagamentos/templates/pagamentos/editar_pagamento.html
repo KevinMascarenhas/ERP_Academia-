@@ -1,27 +1,48 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar pagamento — Academia</title>
-</head>
-<body>
-    <h2>Editar pagamento</h2>
-    <form method="post">
-        {% csrf_token %}
-        <p><label>ID do aluno: <input type="number" name="aluno_id" value="{{ pagamento.aluno_id }}" required></label></p>
-        <p><label>Valor: <input type="number" step="0.01" name="valor" value="{{ pagamento.valor }}" required></label></p>
-        <p><label>Mes/Ano: <input type="text" name="mes_ano" value="{{ pagamento.mes_ano }}" required></label></p>
-        <p>
-            <label>Status:
-                <select name="status">
-                    <option value="pendente" {% if pagamento.status == "pendente" %}selected{% endif %}>Pendente</option>
-                    <option value="pago" {% if pagamento.status == "pago" %}selected{% endif %}>Pago</option>
-                    <option value="atrasado" {% if pagamento.status == "atrasado" %}selected{% endif %}>Atrasado</option>
-                </select>
-            </label>
-        </p>
-        <button type="submit">Salvar</button>
-    </form>
-    <p><a href="{% url 'listar_pagamentos' %}">Voltar</a></p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Editar Pagamento | Academia Fit{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Editar pagamento</h2>
+            <p class="section-subtitle">Atualize os dados do pagamento selecionado.</p>
+        </div>
+        <a href="{% url 'listar_pagamentos' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Aluno</label>
+                    <select name="aluno_id" class="form-select" required>
+                        {% for aluno in alunos %}
+                            <option value="{{ aluno.id }}" {% if pagamento.aluno_id == aluno.id %}selected{% endif %}>{{ aluno.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Valor</label>
+                    <input type="number" step="0.01" name="valor" class="form-control" value="{{ pagamento.valor }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Mes/Ano</label>
+                    <input type="text" name="mes_ano" class="form-control" value="{{ pagamento.mes_ano }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Status</label>
+                    <select name="status" class="form-select">
+                        <option value="pendente" {% if pagamento.status == "pendente" %}selected{% endif %}>Pendente</option>
+                        <option value="pago" {% if pagamento.status == "pago" %}selected{% endif %}>Pago</option>
+                        <option value="atrasado" {% if pagamento.status == "atrasado" %}selected{% endif %}>Atrasado</option>
+                    </select>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

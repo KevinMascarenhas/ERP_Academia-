@@ -1,23 +1,42 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Login — Academia</title>
-</head>
-<body>
-    <h2>Login</h2>
+{% extends "base.html" %}
 
-    {% if erro %}
-        <p style="color: red;">{{ erro }}</p>
-    {% endif %}
+{% block title %}Login | Academia Fit{% endblock %}
 
-    <form method="POST">
-        {% csrf_token %}
-        <label>Email:</label>
-        <input type="email" name="email" value="{{ email|default:'' }}" required><br><br>
-        <label>Senha:</label>
-        <input type="password" name="password" required><br><br>
-        <button type="submit">Entrar</button>
-    </form>
-</body>
-</html>
+{% block body %}
+<div class="login-shell">
+    <div class="login-box">
+        <div class="card panel-card p-4 p-md-5">
+            <h1 class="text-center mb-2">Academia Fit</h1>
+            <p class="text-center text-muted mb-4">Entre com seu e-mail e senha para acessar o sistema.</p>
+
+            {% if erro %}
+                <div class="alert alert-danger" role="alert">
+                    {{ erro }}
+                </div>
+            {% endif %}
+
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="email" class="form-label">E-mail</label>
+                    <input
+                        id="email"
+                        type="email"
+                        name="email"
+                        class="form-control"
+                        value="{{ email|default:'' }}"
+                        required
+                    >
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="form-label">Senha</label>
+                    <input id="password" type="password" name="password" class="form-control" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary w-100">Entrar</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

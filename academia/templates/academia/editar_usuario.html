@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Usuario | Academia Fit{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Editar usuario</h2>
+            <p class="section-subtitle">Atualize os dados de {{ usuario_editado.nome }}.</p>
+        </div>
+        <a href="{% url 'listar_usuarios' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="nome" class="form-control" value="{{ usuario_editado.nome }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">E-mail</label>
+                    <input type="email" name="email" class="form-control" value="{{ usuario_editado.email }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Nova senha</label>
+                    <input type="password" name="password" class="form-control">
+                    <div class="helper-text mt-2">Deixe em branco para manter a senha atual.</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label d-block">Status</label>
+                    <div class="form-check mt-2">
+                        <input type="checkbox" name="is_active" class="form-check-input" id="is_active" {% if usuario_editado.is_active %}checked{% endif %}>
+                        <label for="is_active" class="form-check-label">Usuario ativo</label>
+                    </div>
+                </div>
+                {% if tipo_usuario == "Funcionario" %}
+                    <div class="col-md-6">
+                        <label class="form-label">ID do funcionário</label>
+                        <input type="text" name="id_funcionario" class="form-control" value="{{ usuario_editado.id_funcionario }}" required>
+                    </div>
+                {% endif %}
+                {% if tipo_usuario == "Aluno" %}
+                    <div class="col-md-6">
+                        <label class="form-label">CPF</label>
+                        <input type="text" name="cpf" class="form-control" value="{{ usuario_editado.cpf }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Plano</label>
+                        <select name="plano" class="form-select">
+                            <option value="">Sem plano</option>
+                            {% for plano in planos %}
+                                <option value="{{ plano.id_plano }}" {% if usuario_editado.plano_id == plano.id_plano %}selected{% endif %}>{{ plano.nome_plano }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

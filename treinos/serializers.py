@@ -17,3 +17,8 @@ class TreinoSerializer(serializers.ModelSerializer):
             "repeticoes",
             "data",
         ]
+
+
+class SugestaoTreinoSerializer(serializers.Serializer):
+    grupo_muscular = serializers.CharField()
+    exercicios = serializers.ListField(child=serializers.CharField())

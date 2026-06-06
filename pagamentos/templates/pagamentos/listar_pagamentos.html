@@ -1,38 +1,55 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Pagamentos — Academia</title>
-</head>
-<body>
-    <h2>Pagamentos</h2>
-    <p><a href="{% url 'dashboard' %}">Dashboard</a> | <a href="{% url 'criar_pagamento' %}">Criar pagamento</a></p>
+{% extends "base.html" %}
 
-    <table border="1" cellpadding="6">
-        <tr>
-            <th>Aluno</th>
-            <th>Valor</th>
-            <th>Mes/Ano</th>
-            <th>Status</th>
-            <th>Acoes</th>
-        </tr>
-        {% for pagamento in pagamentos %}
-            <tr>
-                <td>{{ pagamento.aluno.nome }}</td>
-                <td>R$ {{ pagamento.valor }}</td>
-                <td>{{ pagamento.mes_ano }}</td>
-                <td>{{ pagamento.status }}</td>
-                <td>
-                    <a href="{% url 'editar_pagamento' pagamento.id %}">Editar</a>
-                    <form method="post" action="{% url 'excluir_pagamento' pagamento.id %}" style="display:inline">
-                        {% csrf_token %}
-                        <button type="submit">Excluir</button>
-                    </form>
-                </td>
-            </tr>
-        {% empty %}
-            <tr><td colspan="5">Nenhum pagamento cadastrado.</td></tr>
-        {% endfor %}
-    </table>
-</body>
-</html>
+{% block title %}Pagamentos | Academia Fit{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Pagamentos</h2>
+            <p class="section-subtitle">Controle financeiro da academia.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Dashboard</a>
+            <a href="{% url 'criar_pagamento' %}" class="btn btn-success">Novo pagamento</a>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Aluno</th>
+                        <th>Valor</th>
+                        <th>Mes/Ano</th>
+                        <th>Status</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pagamento in pagamentos %}
+                        <tr>
+                            <td>{{ pagamento.aluno.nome }}</td>
+                            <td>R$ {{ pagamento.valor }}</td>
+                            <td>{{ pagamento.mes_ano }}</td>
+                            <td><span class="badge badge-soft">{{ pagamento.status }}</span></td>
+                            <td>
+                                <a href="{% url 'editar_pagamento' pagamento.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
+                                <form method="post" action="{% url 'excluir_pagamento' pagamento.id %}" class="action-inline" data-confirm-delete="true">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">Nenhum pagamento cadastrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

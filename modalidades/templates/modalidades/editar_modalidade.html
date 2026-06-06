@@ -1,19 +1,41 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar modalidade — Academia</title>
-</head>
-<body>
-    <h2>Editar modalidade</h2>
-    <form method="post">
-        {% csrf_token %}
-        <p><label>Nome: <input type="text" name="modalidade_nome" value="{{ modalidade.modalidade_nome }}" required></label></p>
-        <p><label>Categoria: <input type="text" name="categoria" value="{{ modalidade.categoria }}" required></label></p>
-        <p><label>Horario: <input type="text" name="horario" value="{{ modalidade.horario }}" required></label></p>
-        <p><label>Dias da semana: <input type="text" name="dias_semana" value="{{ modalidade.dias_semana }}"></label></p>
-        <button type="submit">Salvar</button>
-    </form>
-    <p><a href="{% url 'listar_modalidades' %}">Voltar</a></p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Editar Modalidade | Academia Fit{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Editar modalidade</h2>
+            <p class="section-subtitle">Atualize os dados da modalidade selecionada.</p>
+        </div>
+        <a href="{% url 'listar_modalidades' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="modalidade_nome" class="form-control" value="{{ modalidade.modalidade_nome }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Categoria</label>
+                    <input type="text" name="categoria" class="form-control" value="{{ modalidade.categoria }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Horário</label>
+                    <input type="text" name="horario" class="form-control" value="{{ modalidade.horario }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Dias da semana</label>
+                    <input type="text" name="dias_semana" class="form-control" value="{{ modalidade.dias_input }}">
+                    <div class="helper-text mt-2">Informe os dias separados por vírgula, por exemplo: Segunda, Quarta.</div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

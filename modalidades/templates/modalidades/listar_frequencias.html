@@ -1,25 +1,24 @@
 {% extends "base.html" %}
 
-{% block title %}Treinos | Academia Fit{% endblock %}
+{% block title %}Frequencias | Academia Fit{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
     <div class="page-header">
         <div>
-            <h2>Treinos</h2>
+            <h2>Frequências</h2>
             <p class="section-subtitle">
                 {% if pode_gerenciar %}
-                    Gerenciamento de treinos dos alunos.
+                    Controle de presença dos alunos.
                 {% else %}
-                    Consulte seus treinos cadastrados e veja sugestoes de exercicios.
+                    Histórico das suas frequências.
                 {% endif %}
             </p>
         </div>
         <div class="d-flex gap-2">
             <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Dashboard</a>
-            <a href="{% url 'sugerir_treino' %}" class="btn btn-outline-primary">Sugestão de treino</a>
             {% if pode_gerenciar %}
-                <a href="{% url 'criar_treino' %}" class="btn btn-success">Novo treino</a>
+                <a href="{% url 'criar_frequencia' %}" class="btn btn-success">Nova frequencia</a>
             {% endif %}
         </div>
     </div>
@@ -29,28 +28,24 @@
             <table class="table align-middle mb-0">
                 <thead>
                     <tr>
-                        <th>Treino</th>
                         <th>Aluno</th>
-                        <th>Grupo</th>
-                        <th>Séries</th>
-                        <th>Repetições</th>
+                        <th>Modalidade</th>
                         <th>Data</th>
+                        <th>Hora</th>
                         <th>Ações</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for treino in treinos %}
+                    {% for frequencia in frequencias %}
                         <tr>
-                            <td>{{ treino.nome_treino }}</td>
-                            <td>{{ treino.aluno.nome }}</td>
-                            <td>{{ treino.grupo_muscular }}</td>
-                            <td>{{ treino.series }}</td>
-                            <td>{{ treino.repeticoes }}</td>
-                            <td>{{ treino.data }}</td>
+                            <td>{{ frequencia.aluno.nome }}</td>
+                            <td>{{ frequencia.modalidade.modalidade_nome }}</td>
+                            <td>{{ frequencia.data }}</td>
+                            <td>{{ frequencia.hora }}</td>
                             <td>
                                 {% if pode_gerenciar %}
-                                    <a href="{% url 'editar_treino' treino.id_treino %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                    <form method="post" action="{% url 'excluir_treino' treino.id_treino %}" class="action-inline" data-confirm-delete="true">
+                                    <a href="{% url 'editar_frequencia' frequencia.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
+                                    <form method="post" action="{% url 'excluir_frequencia' frequencia.id %}" class="action-inline" data-confirm-delete="true">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                     </form>
@@ -60,9 +55,7 @@
                             </td>
                         </tr>
                     {% empty %}
-                        <tr>
-                            <td colspan="7" class="empty-state">Nenhum treino cadastrado.</td>
-                        </tr>
+                        <tr><td colspan="5" class="empty-state">Nenhuma frequencia encontrada.</td></tr>
                     {% endfor %}
                 </tbody>
             </table>

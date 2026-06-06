@@ -13,6 +13,7 @@ class InscricaoSerializer(serializers.ModelSerializer):
     class Meta:
         model = Inscricao
         fields = ["id", "aluno", "modalidade", "data", "hora", "status"]
+        read_only_fields = ["id", "status"]
 
 
 class FrequenciaSerializer(serializers.ModelSerializer):

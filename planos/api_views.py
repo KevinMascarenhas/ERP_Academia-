@@ -1,16 +1,18 @@
 from drf_spectacular.utils import extend_schema
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from academia.permissions import IsAdminOrFuncionarioProfile
 from .models import Plano
 from .serializers import PlanoSerializer
 
 
 @extend_schema(tags=["Planos"])
 class PlanoListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Listar planos", responses=PlanoSerializer(many=True))
     def get(self, request):
@@ -28,10 +30,10 @@ class PlanoListCreateApiView(APIView):
 
 @extend_schema(tags=["Planos"])
 class PlanoDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     def get_object(self, id_plano):
-        return Plano.objects.get(id_plano=id_plano)
+        return get_object_or_404(Plano, id_plano=id_plano)
 
     @extend_schema(summary="Detalhar plano", responses=PlanoSerializer)
     def get(self, request, id_plano):

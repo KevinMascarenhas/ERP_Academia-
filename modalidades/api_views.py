@@ -5,13 +5,14 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
+from academia.permissions import IsAdminOrFuncionarioProfile
 from .models import Frequencia, Inscricao, Modalidade
 from .serializers import FrequenciaSerializer, InscricaoSerializer, ModalidadeSerializer
 
 
 @extend_schema(tags=["Modalidades"])
 class ModalidadeListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Listar modalidades", responses=ModalidadeSerializer(many=True))
     def get(self, request):
@@ -28,7 +29,7 @@ class ModalidadeListCreateApiView(APIView):
 
 @extend_schema(tags=["Modalidades"])
 class InscricaoListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Listar inscricoes", responses=InscricaoSerializer(many=True))
     def get(self, request):
@@ -45,7 +46,7 @@ class InscricaoListCreateApiView(APIView):
 
 @extend_schema(tags=["Modalidades"])
 class FrequenciaListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Listar frequencias", responses=FrequenciaSerializer(many=True))
     def get(self, request):
@@ -62,7 +63,7 @@ class FrequenciaListCreateApiView(APIView):
 
 @extend_schema(tags=["Modalidades"])
 class ModalidadeDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Detalhar modalidade", responses=ModalidadeSerializer)
     def get(self, request, id):
@@ -92,7 +93,7 @@ class ModalidadeDetailApiView(APIView):
 
 @extend_schema(tags=["Modalidades"])
 class InscricaoDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Detalhar inscricao", responses=InscricaoSerializer)
     def get(self, request, id):
@@ -121,8 +122,30 @@ class InscricaoDetailApiView(APIView):
 
 
 @extend_schema(tags=["Modalidades"])
+class InscricaoConfirmarApiView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
+
+    @extend_schema(summary="Confirmar inscricao", responses=InscricaoSerializer)
+    def post(self, request, id):
+        inscricao = get_object_or_404(Inscricao, id=id)
+        inscricao.confirmar()
+        return Response(InscricaoSerializer(inscricao).data)
+
+
+@extend_schema(tags=["Modalidades"])
+class InscricaoCancelarApiView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
+
+    @extend_schema(summary="Cancelar inscricao", responses=InscricaoSerializer)
+    def post(self, request, id):
+        inscricao = get_object_or_404(Inscricao, id=id)
+        inscricao.cancelar()
+        return Response(InscricaoSerializer(inscricao).data)
+
+
+@extend_schema(tags=["Modalidades"])
 class FrequenciaDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Detalhar frequencia", responses=FrequenciaSerializer)
     def get(self, request, id):

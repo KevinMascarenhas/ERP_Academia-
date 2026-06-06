@@ -21,6 +21,15 @@ class UsuarioSerializer(serializers.ModelSerializer):
         usuario.save()
         return usuario
 
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        for atributo, valor in validated_data.items():
+            setattr(instance, atributo, valor)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
 
 class AdministradorSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
@@ -38,6 +47,15 @@ class AdministradorSerializer(serializers.ModelSerializer):
         administrador.save()
         return administrador
 
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        for atributo, valor in validated_data.items():
+            setattr(instance, atributo, valor)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
+
 
 class FuncionarioSerializer(serializers.ModelSerializer):
     password = serializers.CharField(write_only=True, required=False)
@@ -54,6 +72,15 @@ class FuncionarioSerializer(serializers.ModelSerializer):
             funcionario.set_password(password)
         funcionario.save()
         return funcionario
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        for atributo, valor in validated_data.items():
+            setattr(instance, atributo, valor)
+        if password:
+            instance.set_password(password)
+        instance.save()
+        return instance
 
 
 class AlunoSerializer(serializers.ModelSerializer):
@@ -81,3 +108,20 @@ class AlunoSerializer(serializers.ModelSerializer):
             aluno.set_password(password)
         aluno.save()
         return aluno
+
+    def update(self, instance, validated_data):
+        password = validated_data.pop("password", None)
+        modalidades_inscritas = validated_data.pop("modalidades_inscritas", None)
+
+        for atributo, valor in validated_data.items():
+            setattr(instance, atributo, valor)
+
+        if password:
+            instance.set_password(password)
+
+        instance.save()
+
+        if modalidades_inscritas is not None:
+            instance.modalidades_inscritas.set(modalidades_inscritas)
+
+        return instance

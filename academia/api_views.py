@@ -1,11 +1,12 @@
 from drf_spectacular.utils import extend_schema
 from django.shortcuts import get_object_or_404
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
 
 from .models import Administrador, Aluno, Funcionario, Usuario
+from .permissions import IsAdminOrFuncionarioProfile, IsAdminProfile
 from .serializers import (
     AdministradorSerializer,
     AlunoSerializer,
@@ -16,7 +17,7 @@ from .serializers import (
 
 @extend_schema(tags=["Academia"])
 class UsuarioListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminProfile]
 
     @extend_schema(summary="Listar usuarios", responses=UsuarioSerializer(many=True))
     def get(self, request):
@@ -33,7 +34,7 @@ class UsuarioListCreateApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class AdministradorListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminProfile]
 
     @extend_schema(summary="Listar administradores", responses=AdministradorSerializer(many=True))
     def get(self, request):
@@ -50,7 +51,7 @@ class AdministradorListCreateApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class FuncionarioListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminProfile]
     
     @extend_schema(summary="Listar funcionarios", responses=FuncionarioSerializer(many=True))
     def get(self, request):
@@ -67,7 +68,7 @@ class FuncionarioListCreateApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class AlunoListCreateApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Listar alunos", responses=AlunoSerializer(many=True))
     def get(self, request):
@@ -84,7 +85,7 @@ class AlunoListCreateApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class UsuarioDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminProfile]
 
     @extend_schema(summary="Detalhar usuario", responses=UsuarioSerializer)
     def get(self, request, id):
@@ -114,7 +115,7 @@ class UsuarioDetailApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class AdministradorDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminProfile]
 
     @extend_schema(summary="Detalhar administrador", responses=AdministradorSerializer)
     def get(self, request, id):
@@ -144,7 +145,7 @@ class AdministradorDetailApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class FuncionarioDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminProfile]
 
     @extend_schema(summary="Detalhar funcionario", responses=FuncionarioSerializer)
     def get(self, request, id):
@@ -174,7 +175,7 @@ class FuncionarioDetailApiView(APIView):
 
 @extend_schema(tags=["Academia"])
 class AlunoDetailApiView(APIView):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, IsAdminOrFuncionarioProfile]
 
     @extend_schema(summary="Detalhar aluno", responses=AlunoSerializer)
     def get(self, request, id):

@@ -1,5 +1,8 @@
 from django.test import TestCase
 from django.utils import timezone
+from django.contrib.auth import get_user_model
+from rest_framework.test import APIClient
+from rest_framework import status
 from academia.models import Aluno
 from planos.models import Plano
 from modalidades.models import Modalidade, Inscricao, Frequencia
@@ -68,3 +71,52 @@ class ModalidadesTestCase(TestCase):
         self.assertEqual(frequencia.modalidade, self.modalidade_musculacao)
         self.assertEqual(frequencia.data, hoje)
         self.assertEqual(frequencia.hora, agora)
+
+
+class ModalidadesApiTestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            email="api@academia.com",
+            nome="API User",
+            password="securepassword123",
+        )
+        self.client.force_authenticate(user=self.user)
+
+        self.plano = Plano.objects.create(
+            nome_plano="API Plano",
+            preco=90.00,
+            modalidades_inclusas=2,
+            duracao_meses=6,
+        )
+        self.aluno = Aluno.objects.create(
+            email="alunoapi@academia.com",
+            nome="Aluno API",
+            cpf="999.888.777-66",
+            plano=self.plano,
+        )
+        self.modalidade = Modalidade.objects.create(
+            modalidade_nome="Funcional",
+            categoria="Condicionamento",
+            horario="18:00",
+            dias_semana=["Segunda", "Quarta"],
+        )
+        self.inscricao = Inscricao.objects.create(
+            aluno=self.aluno,
+            modalidade=self.modalidade,
+            data=timezone.localdate(),
+            hora=timezone.now().time(),
+        )
+
+    def test_confirmar_inscricao(self):
+        response = self.client.post(f"/api/modalidades/inscricoes/{self.inscricao.id}/confirmar/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.inscricao.refresh_from_db()
+        self.assertEqual(self.inscricao.status, Inscricao.STATUS_CONFIRMADO)
+
+    def test_cancelar_inscricao(self):
+        response = self.client.post(f"/api/modalidades/inscricoes/{self.inscricao.id}/cancelar/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.inscricao.refresh_from_db()
+        self.assertEqual(self.inscricao.status, Inscricao.STATUS_CANCELADO)

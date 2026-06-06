@@ -1,23 +1,61 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Editar treino — Academia</title>
-</head>
-<body>
-    <h2>Editar treino</h2>
-    <form method="post">
-        {% csrf_token %}
-        <p><label>Nome: <input type="text" name="nome_treino" value="{{ treino.nome_treino }}" required></label></p>
-        <p><label>Descricao: <textarea name="descricao" required>{{ treino.descricao }}</textarea></label></p>
-        <p><label>ID do aluno: <input type="number" name="aluno_id" value="{{ treino.aluno_id }}" required></label></p>
-        <p><label>Grupo muscular: <input type="text" name="grupo_muscular" value="{{ treino.grupo_muscular }}" required></label></p>
-        <p><label>Exercicios: <input type="text" name="exercicios" value="{{ treino.exercicios }}"></label></p>
-        <p><label>Series: <input type="number" name="series" value="{{ treino.series }}" required></label></p>
-        <p><label>Repeticoes: <input type="number" name="repeticoes" value="{{ treino.repeticoes }}" required></label></p>
-        <p><label>Data: <input type="date" name="data" value="{{ treino.data|date:'Y-m-d' }}" required></label></p>
-        <button type="submit">Salvar</button>
-    </form>
-    <p><a href="{% url 'listar_treinos' %}">Voltar</a></p>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Editar Treino | Academia Fit{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Editar treino</h2>
+            <p class="section-subtitle">Atualize os dados do treino selecionado.</p>
+        </div>
+        <a href="{% url 'listar_treinos' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="nome_treino" class="form-control" value="{{ treino.nome_treino }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Aluno</label>
+                    <select name="aluno_id" class="form-select" required>
+                        {% for aluno in alunos %}
+                            <option value="{{ aluno.id }}" {% if treino.aluno_id == aluno.id %}selected{% endif %}>{{ aluno.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Grupo muscular</label>
+                    <input type="text" name="grupo_muscular" class="form-control" value="{{ treino.grupo_muscular }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Data</label>
+                    <input type="date" name="data" class="form-control" value="{{ treino.data|date:'Y-m-d' }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Séries</label>
+                    <input type="number" name="series" class="form-control" value="{{ treino.series }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Repetições</label>
+                    <input type="number" name="repeticoes" class="form-control" value="{{ treino.repeticoes }}" required>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Descrição</label>
+                    <textarea name="descricao" class="form-control" required>{{ treino.descricao }}</textarea>
+                </div>
+                <div class="col-12">
+                    <label class="form-label">Exercicios</label>
+                    <input type="text" name="exercicios" class="form-control" value="{{ treino.exercicios }}">
+                    <div class="helper-text mt-2">Mantenha o formato JSON ou use itens separados por vírgulas.</div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}
