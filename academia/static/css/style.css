@@ -4,6 +4,36 @@ body {
     color: #1f2937;
 }
 
+.app-shell {
+    position: relative;
+}
+
+.app-shell::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(circle at top right, rgba(13, 110, 253, 0.10), transparent 28%),
+        radial-gradient(circle at bottom left, rgba(25, 135, 84, 0.08), transparent 24%);
+    pointer-events: none;
+    z-index: -1;
+}
+
+.topbar {
+    background: rgba(17, 24, 39, 0.92);
+    backdrop-filter: blur(8px);
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.14);
+}
+
+.topbar .navbar-brand small {
+    display: block;
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    opacity: 0.75;
+    text-transform: uppercase;
+}
+
 .login-shell {
     min-height: 100vh;
     display: flex;
@@ -15,6 +45,33 @@ body {
 .login-box {
     width: 100%;
     max-width: 450px;
+}
+
+.login-box .card {
+    position: relative;
+    overflow: hidden;
+}
+
+.login-box .card::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 6px;
+    background: linear-gradient(90deg, #0d6efd, #20c997);
+}
+
+.login-brand-mark {
+    width: 64px;
+    height: 64px;
+    border-radius: 20px;
+    display: grid;
+    place-items: center;
+    margin: 0 auto 1rem;
+    background: linear-gradient(135deg, #0d6efd, #198754);
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    box-shadow: 0 16px 30px rgba(13, 110, 253, 0.22);
 }
 
 .panel-card,
@@ -34,6 +91,7 @@ body {
 .menu-card .card {
     height: 100%;
     transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border: 1px solid rgba(148, 163, 184, 0.18);
 }
 
 .menu-card .card:hover {
@@ -43,6 +101,31 @@ body {
 
 .page-shell {
     padding: 32px 0 48px;
+}
+
+.hero-card {
+    background: linear-gradient(135deg, #111827, #1f3a5f);
+    color: #fff;
+    border-radius: 24px;
+    padding: 28px;
+    box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
+    margin-bottom: 24px;
+}
+
+.hero-card p,
+.hero-card .text-muted {
+    color: rgba(255, 255, 255, 0.78) !important;
+}
+
+.hero-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.12);
+    font-size: 0.9rem;
+    margin-bottom: 14px;
 }
 
 .page-header {
@@ -67,6 +150,29 @@ body {
 .form-card {
     background: #fff;
     padding: 20px;
+}
+
+.metric-card {
+    background: linear-gradient(180deg, #ffffff 0%, #f8fafc 100%);
+}
+
+.metric-label {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: #eef4ff;
+    color: #2457c5;
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    margin-bottom: 10px;
+}
+
+.metric-value {
+    font-size: 2rem;
+    font-weight: 700;
+    line-height: 1;
+    margin-bottom: 8px;
 }
 
 .topbar-brand {
@@ -100,4 +206,27 @@ body {
 
 textarea.form-control {
     min-height: 110px;
+}
+
+.list-group-clean .list-group-item {
+    border: none;
+    border-bottom: 1px solid #eef2f7;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.list-group-clean .list-group-item:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+}
+
+@media (max-width: 768px) {
+    .page-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .hero-card {
+        padding: 22px;
+    }
 }
