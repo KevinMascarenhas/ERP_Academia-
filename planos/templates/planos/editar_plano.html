@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Plano | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Editar plano</h2>
+            <p class="section-subtitle">Atualize os dados do plano selecionado.</p>
+        </div>
+        <a href="{% url 'listar_planos' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post"
+              data-api-url="/api/planos/{{ plano.id_plano }}/"
+              data-method="PUT"
+              data-success-redirect="{% url 'listar_planos' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="nome_plano" class="form-control" value="{{ plano.nome_plano }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Preco</label>
+                    <input type="number" step="0.01" name="preco" class="form-control" value="{{ plano.preco }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Modalidades inclusas</label>
+                    <input type="number" name="modalidades_inclusas" class="form-control" value="{{ plano.modalidades_inclusas }}" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Duracao em meses</label>
+                    <input type="number" name="duracao_meses" class="form-control" value="{{ plano.duracao_meses }}" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

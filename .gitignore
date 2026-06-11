@@ -206,5 +206,6 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# Django settings com informações sensíveis
-config/settings.py
+CONTEUDO_SLIDES_RESUMIDO.md
+DOCUMENTACAO_APRESENTACAO.md
+

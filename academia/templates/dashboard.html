@@ -1,12 +1,67 @@
-<!DOCTYPE html>
-<html lang="pt-br">
-<head>
-    <meta charset="UTF-8">
-    <title>Dashboard — Academia</title>
-</head>
-<body>
-    <h2>Bem-vindo, {{ usuario.nome }}!</h2>
-    <p>Perfil: {{ usuario.perfil }}</p>
-    <a href="{% url 'logout' %}">Sair</a>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Fit API{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container">
+        <span class="navbar-brand topbar-brand">Fit API</span>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Sair</a>
+    </div>
+</nav>
+
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h1>Bem-vindo, {{ usuario.nome }}</h1>
+            <p class="section-subtitle">Perfil: {{ usuario.perfil }}</p>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        {% if usuario.perfil == "Administrador" or usuario.perfil == "Funcionario" or usuario.perfil == "Funcionário" or usuario.perfil == "Aluno" %}
+            <div class="col-md-4">
+                <a href="{% url 'listar_modalidades' %}" class="menu-card">
+                    <div class="card p-4">
+                        <h4>Modalidades</h4>
+                        <p class="mb-0">Acesse as modalidades disponiveis.</p>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+
+        {% if usuario.perfil == "Administrador" %}
+            <div class="col-md-4">
+                <a href="{% url 'listar_planos' %}" class="menu-card">
+                    <div class="card p-4">
+                        <h4>Planos</h4>
+                        <p class="mb-0">Gerencie os planos e beneficios.</p>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+
+        {% if usuario.perfil == "Administrador" or usuario.perfil == "Funcionario" or usuario.perfil == "Funcionário" or usuario.perfil == "Aluno" %}
+            <div class="col-md-4">
+                <a href="{% url 'listar_treinos' %}" class="menu-card">
+                    <div class="card p-4">
+                        <h4>Treinos</h4>
+                        <p class="mb-0">Consulte os treinos cadastrados.</p>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+
+        {% if usuario.perfil == "Administrador" or usuario.perfil == "Funcionario" or usuario.perfil == "Funcionário" %}
+            <div class="col-md-4">
+                <a href="{% url 'listar_pagamentos' %}" class="menu-card">
+                    <div class="card p-4">
+                        <h4>Pagamentos</h4>
+                        <p class="mb-0">Visualize o controle financeiro.</p>
+                    </div>
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

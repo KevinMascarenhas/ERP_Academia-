@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Sugestão de Treino | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Sugestão de treino</h2>
+            <p class="section-subtitle">Escolha um grupo muscular e veja sugestões de exercícios.</p>
+        </div>
+        <a href="{% url 'listar_treinos' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card mb-4">
+        <form method="get">
+            <div class="row g-3 align-items-end">
+                <div class="col-md-8">
+                    <label class="form-label">Grupo muscular</label>
+                    <select name="grupo" class="form-select">
+                        <option value="">Selecione</option>
+                        {% for item in grupos_disponiveis %}
+                            <option value="{{ item }}" {% if grupo == item %}selected{% endif %}>{{ item }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary w-100">Buscar sugestão</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-card">
+        <h4 class="mb-3">Exercícios sugeridos</h4>
+        {% if exercicios %}
+            <ul class="mb-0">
+                {% for exercicio in exercicios %}
+                    <li>{{ exercicio }}</li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p class="mb-0 text-muted">Selecione um grupo muscular para receber sugestões.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

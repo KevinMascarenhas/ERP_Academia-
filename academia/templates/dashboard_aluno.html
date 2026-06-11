@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Aluno | Fit API{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-dark topbar">
+    <div class="container">
+        <span class="navbar-brand topbar-brand mb-0">
+            <small>Painel interno</small>
+            Fit API
+        </span>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Sair</a>
+    </div>
+</nav>
+
+<div class="container page-shell">
+    <div class="hero-card">
+        <div class="page-header mb-0">
+            <div>
+                <h1>Meu Painel</h1>
+                <p class="section-subtitle">Acompanhe seu plano, modalidades e treinos, {{ usuario.nome }}.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Modalidades</span>
+                <div class="metric-value">{{ modalidades_registradas|length }}</div>
+                <p class="mb-0 text-muted">Modalidades registradas</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Rotina</span>
+                <div class="metric-value">{{ treinos_recentes|length }}</div>
+                <p class="mb-0 text-muted">Treinos recentes</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Presença</span>
+                <div class="metric-value">{{ total_frequencias }}</div>
+                <p class="mb-0 text-muted">Frequências registradas</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-4">
+            <a href="{% url 'listar_modalidades' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Modalidades</h4>
+                    <p class="mb-0">Veja quais modalidades estão disponíveis e registre-se conforme seu plano.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'meu_plano' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Meu Plano</h4>
+                    <p class="mb-0">Consulte vantagens e limite de modalidades inclusas.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_treinos' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Treinos</h4>
+                    <p class="mb-0">Acompanhe seus treinos cadastrados.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_frequencias' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Frequências</h4>
+                    <p class="mb-0">Veja seu histórico de participação nas modalidades.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'sugerir_treino' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Sugestão de Treino</h4>
+                    <p class="mb-0">Receba ideias de exercícios por grupo muscular.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-lg-6">
+            <div class="table-card">
+                <h4 class="mb-3">Minhas modalidades</h4>
+                {% if modalidades_registradas %}
+                    <ul class="list-group list-group-flush list-group-clean mb-0">
+                        {% for modalidade in modalidades_registradas %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>{{ modalidade.modalidade_nome }}</span>
+                                <span class="badge text-bg-light">{{ modalidade.categoria }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mb-0 text-muted">Você ainda não está registrado em modalidades.</p>
+                {% endif %}
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <div class="table-card">
+                <h4 class="mb-3">Treinos recentes</h4>
+                {% if treinos_recentes %}
+                    <ul class="list-group list-group-flush list-group-clean mb-0">
+                        {% for treino in treinos_recentes %}
+                            <li class="list-group-item d-flex justify-content-between align-items-center gap-3">
+                                <div>
+                                    <strong>{{ treino.nome_treino }}</strong>
+                                    <div class="text-muted small">{{ treino.grupo_muscular }}</div>
+                                </div>
+                                <span class="badge text-bg-light">{{ treino.data }}</span>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="mb-0 text-muted">Nenhum treino cadastrado para você ainda.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

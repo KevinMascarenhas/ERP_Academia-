@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Planos | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Planos</h2>
+            <p class="section-subtitle">Controle de planos da academia.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Dashboard</a>
+            <a href="{% url 'criar_plano' %}" class="btn btn-success">Novo plano</a>
+        </div>
+    </div>
+
+    <div class="table-card">
+        <div class="table-responsive">
+            <table class="table align-middle mb-0">
+                <thead>
+                    <tr>
+                        <th>Plano</th>
+                        <th>Valor</th>
+                        <th>Modalidades</th>
+                        <th>Duracao</th>
+                        <th>Ações</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for plano in planos %}
+                        <tr>
+                            <td>{{ plano.nome_plano }}</td>
+                            <td>R$ {{ plano.preco }}</td>
+                            <td>{{ plano.modalidades_inclusas }}</td>
+                            <td>{{ plano.duracao_meses }} meses</td>
+                            <td>
+                                <a href="{% url 'editar_plano' plano.id_plano %}" class="btn btn-warning btn-sm action-inline">Editar</a>
+                                <form method="post" action="{% url 'excluir_plano' plano.id_plano %}" data-api-url="/api/planos/{{ plano.id_plano }}/" data-method="DELETE" data-success-redirect="{% url 'listar_planos' %}" class="action-inline" data-confirm-delete="true">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="empty-state">Nenhum plano cadastrado.</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

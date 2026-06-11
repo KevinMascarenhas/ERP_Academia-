@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Frequencia | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Editar frequencia</h2>
+            <p class="section-subtitle">Atualize os dados da frequencia selecionada.</p>
+        </div>
+        <a href="{% url 'listar_frequencias' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post"
+              data-api-url="/api/modalidades/frequencias/{{ frequencia.id }}/"
+              data-method="PUT"
+              data-success-redirect="{% url 'listar_frequencias' %}">
+            {% csrf_token %}
+            <div class="row g-3">
+                <div class="col-md-6">
+                    <label class="form-label">Aluno</label>
+                    <select name="aluno_id" class="form-select" required>
+                        {% for aluno in alunos %}
+                            <option value="{{ aluno.id }}" {% if frequencia.aluno_id == aluno.id %}selected{% endif %}>{{ aluno.nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Modalidade</label>
+                    <select name="modalidade_id" class="form-select" required>
+                        {% for modalidade in modalidades %}
+                            <option value="{{ modalidade.id }}" {% if frequencia.modalidade_id == modalidade.id %}selected{% endif %}>{{ modalidade.modalidade_nome }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Data</label>
+                    <input type="date" name="data" class="form-control" value="{{ frequencia.data|date:'Y-m-d' }}">
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Hora</label>
+                    <input type="time" name="hora" class="form-control" value="{{ frequencia.hora|time:'H:i' }}">
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar alterações</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

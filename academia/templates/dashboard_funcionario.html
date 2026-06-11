@@ -1,0 +1,108 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Funcionário | Fit API{% endblock %}
+
+{% block body %}
+<nav class="navbar navbar-dark topbar">
+    <div class="container">
+        <span class="navbar-brand topbar-brand mb-0">
+            <small>Painel interno</small>
+            Fit API
+        </span>
+        <a href="{% url 'logout' %}" class="btn btn-danger">Sair</a>
+    </div>
+</nav>
+
+<div class="container page-shell">
+    <div class="hero-card">
+        <div class="page-header mb-0">
+            <div>
+                <h1>Painel do Funcionário</h1>
+                <p class="section-subtitle">Operação diária da academia para {{ usuario.nome }}.</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Cadastro</span>
+                <div class="metric-value">{{ total_alunos }}</div>
+                <p class="mb-0 text-muted">Alunos cadastrados</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Aulas</span>
+                <div class="metric-value">{{ total_modalidades }}</div>
+                <p class="mb-0 text-muted">Modalidades</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Treinos</span>
+                <div class="metric-value">{{ total_treinos }}</div>
+                <p class="mb-0 text-muted">Treinos cadastrados</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="form-card metric-card h-100">
+                <span class="metric-label">Cobrança</span>
+                <div class="metric-value">{{ pagamentos_pendentes }}</div>
+                <p class="mb-0 text-muted">Pagamentos pendentes</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-3">
+        <div class="col-md-4">
+            <a href="{% url 'listar_usuarios' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Alunos</h4>
+                    <p class="mb-0">Cadastre e atualize alunos sem mexer em administradores ou funcionários.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_planos' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Planos</h4>
+                    <p class="mb-0">Consulte e mantenha os planos ativos.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_modalidades' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Modalidades</h4>
+                    <p class="mb-0">Gerencie horários e acompanhe inscrições.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_treinos' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Treinos</h4>
+                    <p class="mb-0">Monte e mantenha os treinos dos alunos.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_frequencias' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Frequências</h4>
+                    <p class="mb-0">Registre a frequência e acompanhe históricos.</p>
+                </div>
+            </a>
+        </div>
+        <div class="col-md-4">
+            <a href="{% url 'listar_pagamentos' %}" class="menu-card">
+                <div class="card p-4">
+                    <h4>Pagamentos</h4>
+                    <p class="mb-0">Controle cobrança, atraso e quitação.</p>
+                </div>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

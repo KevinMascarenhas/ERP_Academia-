@@ -15,4 +15,4 @@ class Plano(models.Model):
         verbose_name_plural = "Planos"
 
     def __str__(self):
-        return f"{self.nome_plano} — R$ {self.preco}/mês"
+        return f"{self.nome_plano} — R$ {self.preco:.2f}/mês"

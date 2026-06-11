@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Criar Usuario | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Criar usuario</h2>
+            <p class="section-subtitle">Cadastre um novo usuario de acordo com seu perfil de acesso.</p>
+        </div>
+        <a href="{% url 'listar_usuarios' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        <form method="post"
+              data-api-url="/api/academia/alunos/"
+              data-method="POST"
+              data-success-redirect="{% url 'listar_usuarios' %}"
+              data-api-user-create="true">
+            {% csrf_token %}
+            <div class="row g-3">
+                {% if is_admin %}
+                    <div class="col-md-6">
+                        <label class="form-label">Perfil</label>
+                        <select name="perfil" class="form-select">
+                            {% for perfil in perfis_disponiveis %}
+                                <option value="{{ perfil }}">{{ perfil }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                {% endif %}
+                <div class="col-md-6">
+                    <label class="form-label">Nome</label>
+                    <input type="text" name="nome" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">E-mail</label>
+                    <input type="email" name="email" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Senha</label>
+                    <input type="password" name="password" class="form-control" required>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">ID do funcionário</label>
+                    <input type="text" name="id_funcionario" class="form-control">
+                    <div class="helper-text mt-2">Preencha apenas para funcionários.</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">CPF</label>
+                    <input type="text" name="cpf" class="form-control">
+                    <div class="helper-text mt-2">Preencha apenas para alunos.</div>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label">Plano</label>
+                    <select name="plano" class="form-select">
+                        <option value="">Sem plano</option>
+                        {% for plano in planos %}
+                            <option value="{{ plano.id_plano }}">{{ plano.nome_plano }}</option>
+                        {% endfor %}
+                    </select>
+                    <div class="helper-text mt-2">Utilizado somente para alunos.</div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary mt-4">Salvar</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

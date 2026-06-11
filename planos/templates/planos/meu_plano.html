@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Plano | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Meu plano</h2>
+            <p class="section-subtitle">Consulte as vantagens do seu plano atual.</p>
+        </div>
+        <a href="{% url 'dashboard_aluno' %}" class="btn btn-outline-secondary">Voltar</a>
+    </div>
+
+    <div class="form-card">
+        {% if plano %}
+            <h3 class="mb-3">{{ plano.nome_plano }}</h3>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <div class="table-card h-100">
+                        <h4>Valor</h4>
+                        <p class="mb-0">R$ {{ plano.preco }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-card h-100">
+                        <h4>Modalidades inclusas</h4>
+                        <p class="mb-0">{{ plano.modalidades_inclusas }}</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="table-card h-100">
+                <h4>Duração</h4>
+                        <p class="mb-0">{{ plano.duracao_meses }} meses</p>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-4">
+                <h4>Vantagens para você</h4>
+                <ul class="mb-0">
+                    <li>Pode registrar ate {{ plano.modalidades_inclusas }} modalidade{% if plano.modalidades_inclusas != 1 %}s{% endif %} simultaneamente.</li>
+                    <li>Acesso aos seus treinos e histórico de frequências no portal.</li>
+                    <li>Consulta rapida do plano e das modalidades diretamente no dashboard pessoal.</li>
+                </ul>
+            </div>
+        {% else %}
+            <p class="mb-0 text-muted">Você ainda não possui um plano vinculado. Fale com a academia para regularizar seu cadastro.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
