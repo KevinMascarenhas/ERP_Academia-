@@ -102,8 +102,8 @@ DEBUG=True
 ALLOWED_HOSTS=127.0.0.1,localhost
 
 DB_ENGINE=django.db.backends.postgresql
-DB_NAME=erp_academia
-DB_USER=postgres
+DB_NAME=nome_do_banco
+DB_USER=nome_usuario
 DB_PASSWORD=sua_senha
 DB_HOST=localhost
 DB_PORT=5432
