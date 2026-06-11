@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block title %}Turmas | Fit API{% endblock %}
+
+{% block body %}
+<div class="container page-shell">
+    <div class="page-header">
+        <div>
+            <h2>Turmas</h2>
+            <p class="section-subtitle">Cada modalidade possui uma turma vinculada para matrículas e cancelamentos.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <a href="{% url 'listar_modalidades' %}" class="btn btn-outline-secondary">Voltar para modalidades</a>
+        </div>
+    </div>
+
+    {% if turmas %}
+        <div class="row g-4">
+            {% for turma in turmas %}
+                <div class="col-12">
+                    <div class="table-card p-4">
+                        <div class="d-flex flex-column flex-md-row justify-content-between gap-3 mb-3">
+                            <div>
+                                <h4 class="mb-1">{{ turma.nome }}</h4>
+                                <p class="mb-0 text-muted">
+                                    Modalidade: <strong>{{ turma.modalidade.modalidade_nome }}</strong> |
+                                    Categoria: <strong>{{ turma.modalidade.categoria }}</strong> |
+                                    Horario: <strong>{{ turma.modalidade.horario }}</strong>
+                                </p>
+                            </div>
+                            <div class="text-md-end">
+                                <span class="badge text-bg-primary">
+                                    {{ turma.total_inscritos }} de {{ turma.capacidade }} alunos
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="row g-4">
+                            <div class="col-lg-5">
+                                <div class="form-card h-100">
+                                    <h5 class="mb-3">Inscrever aluno</h5>
+                                    <form method="post"
+                                          data-api-url="/api/modalidades/turmas/{{ turma.id }}/inscricoes/"
+                                          data-method="POST"
+                                          data-success-redirect="{% url 'listar_turmas' %}">
+                                        {% csrf_token %}
+                                        <div class="mb-3">
+                                            <label class="form-label">Aluno</label>
+                                            <select name="aluno" class="form-select" required>
+                                                <option value="">Selecione um aluno</option>
+                                                {% for aluno in alunos %}
+                                                    <option value="{{ aluno.id }}">{{ aluno.nome }} - {{ aluno.email }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <button type="submit" class="btn btn-primary w-100">Inscrever na turma</button>
+                                    </form>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-7">
+                                <div class="form-card h-100">
+                                    <h5 class="mb-3">Alunos inscritos</h5>
+                                    {% if turma.inscricoes_confirmadas %}
+                                        <div class="table-responsive">
+                                            <table class="table align-middle mb-0">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Aluno</th>
+                                                        <th>Data</th>
+                                                        <th>Hora</th>
+                                                        <th>Acoes</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    {% for inscricao in turma.inscricoes_confirmadas %}
+                                                        <tr>
+                                                            <td>{{ inscricao.aluno.nome }}</td>
+                                                            <td>{{ inscricao.data }}</td>
+                                                            <td>{{ inscricao.hora }}</td>
+                                                            <td>
+                                                                <form method="post"
+                                                                      action="#"
+                                                                      data-api-url="/api/modalidades/turmas/inscricoes/{{ inscricao.id }}/"
+                                                                      data-method="DELETE"
+                                                                      data-success-redirect="{% url 'listar_turmas' %}"
+                                                                      class="action-inline"
+                                                                      data-confirm-delete="true">
+                                                                    {% csrf_token %}
+                                                                    <button type="submit" class="btn btn-outline-danger btn-sm">Cancelar</button>
+                                                                </form>
+                                                            </td>
+                                                        </tr>
+                                                    {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    {% else %}
+                                        <p class="text-muted mb-0">Nenhum aluno inscrito nesta turma.</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <div class="table-card p-4">
+            <p class="mb-0 text-muted">Nenhuma turma encontrada.</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

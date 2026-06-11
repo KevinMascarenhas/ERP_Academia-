@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Planos | Academia Fit{% endblock %}
+{% block title %}Planos | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -36,7 +36,7 @@
                             <td>{{ plano.duracao_meses }} meses</td>
                             <td>
                                 <a href="{% url 'editar_plano' plano.id_plano %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                <form method="post" action="{% url 'excluir_plano' plano.id_plano %}" class="action-inline" data-confirm-delete="true">
+                                <form method="post" action="{% url 'excluir_plano' plano.id_plano %}" data-api-url="/api/planos/{{ plano.id_plano }}/" data-method="DELETE" data-success-redirect="{% url 'listar_planos' %}" class="action-inline" data-confirm-delete="true">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                 </form>

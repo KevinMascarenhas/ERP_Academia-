@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Frequencias | Academia Fit{% endblock %}
+{% block title %}Frequencias | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -45,7 +45,7 @@
                             <td>
                                 {% if pode_gerenciar %}
                                     <a href="{% url 'editar_frequencia' frequencia.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                    <form method="post" action="{% url 'excluir_frequencia' frequencia.id %}" class="action-inline" data-confirm-delete="true">
+                                    <form method="post" action="{% url 'excluir_frequencia' frequencia.id %}" data-api-url="/api/modalidades/frequencias/{{ frequencia.id }}/" data-method="DELETE" data-success-redirect="{% url 'listar_frequencias' %}" class="action-inline" data-confirm-delete="true">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                     </form>

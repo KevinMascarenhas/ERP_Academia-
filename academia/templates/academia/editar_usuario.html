@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Editar Usuario | Academia Fit{% endblock %}
+{% block title %}Editar Usuario | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -13,7 +13,18 @@
     </div>
 
     <div class="form-card">
-        <form method="post">
+        <form method="post"
+              {% if tipo_usuario == "Aluno" %}
+                  data-api-url="/api/academia/alunos/{{ usuario_editado.id }}/"
+              {% elif tipo_usuario == "Funcionario" %}
+                  data-api-url="/api/academia/funcionarios/{{ usuario_editado.id }}/"
+              {% elif tipo_usuario == "Administrador" %}
+                  data-api-url="/api/academia/administradores/{{ usuario_editado.id }}/"
+              {% else %}
+                  data-api-url="/api/academia/usuarios/{{ usuario_editado.id }}/"
+              {% endif %}
+              data-method="PUT"
+              data-success-redirect="{% url 'listar_usuarios' %}">
             {% csrf_token %}
             <div class="row g-3">
                 <div class="col-md-6">

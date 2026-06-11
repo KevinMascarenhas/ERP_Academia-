@@ -6,7 +6,7 @@ from .models import Administrador, Aluno, Funcionario, Usuario
 # Eles também permitem personalizar a forma como os dados são representados e validados, garantindo que a API seja consistente e fácil de usar.
 
 class UsuarioSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True, trim_whitespace=False)
 
     class Meta:
         model = Usuario
@@ -15,9 +15,10 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password", None)
+        if not password:
+            raise serializers.ValidationError({"password": "A senha é obrigatória."})
         usuario = Usuario(**validated_data)
-        if password:
-            usuario.set_password(password)
+        usuario.set_password(password)
         usuario.save()
         return usuario
 
@@ -32,7 +33,7 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
 
 class AdministradorSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True, trim_whitespace=False)
 
     class Meta:
         model = Administrador
@@ -41,9 +42,10 @@ class AdministradorSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password", None)
+        if not password:
+            raise serializers.ValidationError({"password": "A senha é obrigatória."})
         administrador = Administrador(**validated_data)
-        if password:
-            administrador.set_password(password)
+        administrador.set_password(password)
         administrador.save()
         return administrador
 
@@ -58,7 +60,7 @@ class AdministradorSerializer(serializers.ModelSerializer):
 
 
 class FuncionarioSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True, trim_whitespace=False)
 
     class Meta:
         model = Funcionario
@@ -67,9 +69,10 @@ class FuncionarioSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password", None)
+        if not password:
+            raise serializers.ValidationError({"password": "A senha é obrigatória."})
         funcionario = Funcionario(**validated_data)
-        if password:
-            funcionario.set_password(password)
+        funcionario.set_password(password)
         funcionario.save()
         return funcionario
 
@@ -84,7 +87,7 @@ class FuncionarioSerializer(serializers.ModelSerializer):
 
 
 class AlunoSerializer(serializers.ModelSerializer):
-    password = serializers.CharField(write_only=True, required=False)
+    password = serializers.CharField(write_only=True, required=False, allow_blank=True, trim_whitespace=False)
 
     class Meta:
         model = Aluno
@@ -103,9 +106,10 @@ class AlunoSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         password = validated_data.pop("password", None)
+        if not password:
+            raise serializers.ValidationError({"password": "A senha é obrigatória."})
         aluno = Aluno(**validated_data)
-        if password:
-            aluno.set_password(password)
+        aluno.set_password(password)
         aluno.save()
         return aluno
 

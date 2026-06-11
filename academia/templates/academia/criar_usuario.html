@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Criar Usuario | Academia Fit{% endblock %}
+{% block title %}Criar Usuario | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -13,7 +13,11 @@
     </div>
 
     <div class="form-card">
-        <form method="post">
+        <form method="post"
+              data-api-url="/api/academia/alunos/"
+              data-method="POST"
+              data-success-redirect="{% url 'listar_usuarios' %}"
+              data-api-user-create="true">
             {% csrf_token %}
             <div class="row g-3">
                 {% if is_admin %}

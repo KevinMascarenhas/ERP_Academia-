@@ -139,6 +139,22 @@ class AcademiaApiPermissionsTestCase(TestCase):
         self.usuario.refresh_from_db()
         self.assertTrue(self.usuario.check_password("newpass123"))
 
+    def test_update_usuario_accepts_blank_password_and_keeps_current_password(self):
+        self.client.force_authenticate(user=self.admin)
+        self.usuario.set_password("oldpass123")
+        self.usuario.save()
+
+        response = self.client.patch(
+            f"/api/academia/usuarios/{self.usuario.id}/",
+            {"nome": "Usuario Atualizado", "password": ""},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.usuario.refresh_from_db()
+        self.assertEqual(self.usuario.nome, "Usuario Atualizado")
+        self.assertTrue(self.usuario.check_password("oldpass123"))
+
 
 class AcademiaWebProfilesTestCase(TestCase):
     def setUp(self):
@@ -241,3 +257,19 @@ class AcademiaWebProfilesTestCase(TestCase):
         response = self.client.get("/treinos/")
         self.assertContains(response, "Treino A")
         self.assertNotContains(response, "Treino B")
+
+    def test_login_web_emite_cookies_jwt_e_autentica_api(self):
+        response = self.client.post(
+            "/api/academia/",
+            {"email": self.admin.email, "password": "adminpass123"},
+            follow=False,
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_302_FOUND)
+        self.assertIn("access_token", response.cookies)
+        self.assertIn("refresh_token", response.cookies)
+        self.assertFalse(response.cookies["access_token"]["secure"])
+        self.assertFalse(response.cookies["refresh_token"]["secure"])
+
+        api_response = self.client.get("/api/academia/alunos/")
+        self.assertEqual(api_response.status_code, status.HTTP_200_OK)

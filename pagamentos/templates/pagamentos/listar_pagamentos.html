@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Pagamentos | Academia Fit{% endblock %}
+{% block title %}Pagamentos | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -22,7 +22,7 @@
                     <tr>
                         <th>Aluno</th>
                         <th>Valor</th>
-                        <th>Mes/Ano</th>
+                        <th>Mês/Ano</th>
                         <th>Status</th>
                         <th>Ações</th>
                     </tr>
@@ -36,7 +36,7 @@
                             <td><span class="badge badge-soft">{{ pagamento.status }}</span></td>
                             <td>
                                 <a href="{% url 'editar_pagamento' pagamento.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                <form method="post" action="{% url 'excluir_pagamento' pagamento.id %}" class="action-inline" data-confirm-delete="true">
+                                <form method="post" action="{% url 'excluir_pagamento' pagamento.id %}" data-api-url="/api/pagamentos/{{ pagamento.id }}/" data-method="DELETE" data-success-redirect="{% url 'listar_pagamentos' %}" class="action-inline" data-confirm-delete="true">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                 </form>

@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Editar Frequencia | Academia Fit{% endblock %}
+{% block title %}Editar Frequencia | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -13,7 +13,10 @@
     </div>
 
     <div class="form-card">
-        <form method="post">
+        <form method="post"
+              data-api-url="/api/modalidades/frequencias/{{ frequencia.id }}/"
+              data-method="PUT"
+              data-success-redirect="{% url 'listar_frequencias' %}">
             {% csrf_token %}
             <div class="row g-3">
                 <div class="col-md-6">

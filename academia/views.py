@@ -1,10 +1,19 @@
 from functools import wraps
+import json
 
+from django.conf import settings as django_settings
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_http_methods, require_POST
+from drf_spectacular.utils import extend_schema, OpenApiParameter
+from rest_framework import status
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework_simplejwt.tokens import RefreshToken
 
 from modalidades.models import Frequencia, Modalidade
 from pagamentos.models import Pagamento
@@ -12,6 +21,17 @@ from planos.models import Plano
 from treinos.models import Treino
 
 from .models import Administrador, Aluno, Funcionario, Usuario
+from .permissions import IsAdminOrFuncionarioProfile, IsAdminProfile
+from .serializers import AdministradorSerializer, AlunoSerializer, FuncionarioSerializer, UsuarioSerializer
+
+
+def get_json_data(request):
+    if not request.body:
+        return {}
+    try:
+        return json.loads(request.body.decode("utf-8"))
+    except json.JSONDecodeError:
+        return {}
 
 
 def perfil_required(*perfis):
@@ -57,6 +77,175 @@ def build_role_flags(user):
     }
 
 
+def serialize_usuario_instance(usuario):
+    if isinstance(usuario, Administrador):
+        return AdministradorSerializer(usuario).data
+    if isinstance(usuario, Funcionario):
+        return FuncionarioSerializer(usuario).data
+    if isinstance(usuario, Aluno):
+        return AlunoSerializer(usuario).data
+    return UsuarioSerializer(usuario).data
+
+
+@extend_schema(
+    methods=["GET"],
+    summary="Lista todos os alunos",
+    responses={200: AlunoSerializer(many=True)},
+    tags=["Alunos"],
+)
+@extend_schema(
+    methods=["POST"],
+    summary="Cria um novo aluno",
+    request=AlunoSerializer,
+    responses={201: AlunoSerializer},
+    tags=["Alunos"],
+)
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated, IsAdminOrFuncionarioProfile])
+def alunos_api(request):
+    if request.method == "GET":
+        return Response(AlunoSerializer(Aluno.objects.select_related("plano").all(), many=True).data)
+    serializer = AlunoSerializer(data=request.data)
+    if serializer.is_valid():
+        aluno = serializer.save()
+        return Response(AlunoSerializer(aluno).data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@extend_schema(
+    methods=["GET"],
+    summary="Lista todos os funcionários",
+    responses={200: FuncionarioSerializer(many=True)},
+    tags=["Funcionários"],
+)
+@extend_schema(
+    methods=["POST"],
+    summary="Cria um novo funcionário",
+    request=FuncionarioSerializer,
+    responses={201: FuncionarioSerializer},
+    tags=["Funcionários"],
+)
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated, IsAdminProfile])
+def funcionarios_api(request):
+    if request.method == "GET":
+        return Response(FuncionarioSerializer(Funcionario.objects.all(), many=True).data)
+    serializer = FuncionarioSerializer(data=request.data)
+    if serializer.is_valid():
+        funcionario = serializer.save()
+        return Response(FuncionarioSerializer(funcionario).data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@extend_schema(
+    methods=["GET"],
+    summary="Lista todos os administradores",
+    responses={200: AdministradorSerializer(many=True)},
+    tags=["Administradores"],
+)
+@extend_schema(
+    methods=["POST"],
+    summary="Cria um novo administrador",
+    request=AdministradorSerializer,
+    responses={201: AdministradorSerializer},
+    tags=["Administradores"],
+)
+@api_view(["GET", "POST"])
+@permission_classes([IsAuthenticated, IsAdminProfile])
+def administradores_api(request):
+    if request.method == "GET":
+        return Response(AdministradorSerializer(Administrador.objects.all(), many=True).data)
+    serializer = AdministradorSerializer(data=request.data)
+    if serializer.is_valid():
+        administrador = serializer.save()
+        return Response(AdministradorSerializer(administrador).data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@extend_schema(
+    methods=["GET"],
+    summary="Retorna detalhes de um usuário",
+    responses={200: UsuarioSerializer},
+    tags=["Usuários"],
+)
+@extend_schema(
+    methods=["PUT"],
+    summary="Atualiza um usuário (completo)",
+    request=UsuarioSerializer,
+    responses={200: UsuarioSerializer},
+    tags=["Usuários"],
+)
+@extend_schema(
+    methods=["PATCH"],
+    summary="Atualiza um usuário (parcial)",
+    request=UsuarioSerializer,
+    responses={200: UsuarioSerializer},
+    tags=["Usuários"],
+)
+@extend_schema(
+    methods=["DELETE"],
+    summary="Remove um usuário",
+    responses={204: None},
+    tags=["Usuários"],
+)
+@api_view(["GET", "PUT", "PATCH", "DELETE"])
+@permission_classes([IsAuthenticated, IsAdminOrFuncionarioProfile])
+def usuario_detail_api(request, user_id):
+    usuario_base = get_object_or_404(Usuario, pk=user_id)
+    usuario = get_usuario_instance(usuario_base)
+    if not can_manage_user(request.user, usuario):
+        return Response({"detail": "Acesso negado."}, status=status.HTTP_403_FORBIDDEN)
+
+    if request.method == "GET":
+        return Response(serialize_usuario_instance(usuario))
+
+    if request.method == "DELETE":
+        usuario.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+    if isinstance(usuario, Administrador):
+        serializer_class = AdministradorSerializer
+    elif isinstance(usuario, Funcionario):
+        serializer_class = FuncionarioSerializer
+    elif isinstance(usuario, Aluno):
+        serializer_class = AlunoSerializer
+    else:
+        serializer_class = UsuarioSerializer
+
+    serializer = serializer_class(usuario, data=request.data, partial=request.method == "PATCH")
+    if serializer.is_valid():
+        usuario = serializer.save()
+        return Response(serializer_class(usuario).data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+def _set_jwt_cookies(response, user, secure=False):
+    """Gera tokens JWT para o user e os define como cookies HttpOnly na response."""
+    refresh = RefreshToken.for_user(user)
+    access_token = str(refresh.access_token)
+    refresh_token = str(refresh)
+
+    access_lifetime = django_settings.SIMPLE_JWT.get("ACCESS_TOKEN_LIFETIME")
+    refresh_lifetime = django_settings.SIMPLE_JWT.get("REFRESH_TOKEN_LIFETIME")
+
+    response.set_cookie(
+        "access_token",
+        access_token,
+        max_age=int(access_lifetime.total_seconds()),
+        httponly=True,
+        samesite="Lax",
+        secure=secure,
+    )
+    response.set_cookie(
+        "refresh_token",
+        refresh_token,
+        max_age=int(refresh_lifetime.total_seconds()),
+        httponly=True,
+        samesite="Lax",
+        secure=secure,
+    )
+    return response
+
+
 def login_view(request):
     if request.user.is_authenticated:
         return redirect("dashboard")
@@ -68,7 +257,9 @@ def login_view(request):
 
         if user is not None:
             login(request, user)
-            return redirect("dashboard")
+            response = redirect("dashboard")
+            _set_jwt_cookies(response, user, secure=request.is_secure())
+            return response
 
         return render(
             request,
@@ -82,7 +273,10 @@ def login_view(request):
 @login_required(login_url="login")
 def logout_view(request):
     logout(request)
-    return redirect("login")
+    response = redirect("login")
+    response.delete_cookie("access_token")
+    response.delete_cookie("refresh_token")
+    return response
 
 
 @login_required(login_url="login")

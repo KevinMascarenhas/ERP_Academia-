@@ -3,6 +3,13 @@ from . import views
 
 urlpatterns = [
     path("", views.login_view, name="login"),
+    path("alunos/", views.alunos_api, name="api_alunos"),
+    path("alunos/<int:user_id>/", views.usuario_detail_api, name="api_aluno_detail"),
+    path("funcionarios/", views.funcionarios_api, name="api_funcionarios"),
+    path("funcionarios/<int:user_id>/", views.usuario_detail_api, name="api_funcionario_detail"),
+    path("administradores/", views.administradores_api, name="api_administradores"),
+    path("administradores/<int:user_id>/", views.usuario_detail_api, name="api_administrador_detail"),
+    path("usuarios/<int:user_id>/", views.usuario_detail_api, name="api_usuario_detail"),
     path("dashboard/", views.dashboard_view, name="dashboard"),
     path("dashboard/admin/", views.dashboard_admin_view, name="dashboard_admin"),
     path("dashboard/funcionario/", views.dashboard_funcionario_view, name="dashboard_funcionario"),

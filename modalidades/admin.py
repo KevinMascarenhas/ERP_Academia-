@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Modalidade, Inscricao, Frequencia
+from .models import Modalidade, Turma, Inscricao, Frequencia
 
 @admin.register(Modalidade)
 class ModalidadeAdmin(admin.ModelAdmin):
@@ -7,6 +7,13 @@ class ModalidadeAdmin(admin.ModelAdmin):
     search_fields = ('modalidade_nome', 'categoria')
     list_filter = ('categoria',)
     ordering = ('modalidade_nome',)
+
+@admin.register(Turma)
+class TurmaAdmin(admin.ModelAdmin):
+    list_display = ('nome', 'modalidade', 'capacidade')
+    search_fields = ('nome', 'modalidade__modalidade_nome')
+    list_filter = ('modalidade',)
+    ordering = ('modalidade__modalidade_nome',)
 
 @admin.register(Inscricao)
 class InscricaoAdmin(admin.ModelAdmin):

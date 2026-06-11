@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Usuários | Academia Fit{% endblock %}
+{% block title %}Usuários | Fit API{% endblock %}
 
 {% block body %}
 <div class="container page-shell">
@@ -42,7 +42,7 @@
                                 <td>{% if administrador.is_active %}Ativo{% else %}Inativo{% endif %}</td>
                                 <td>
                                     <a href="{% url 'editar_usuario' administrador.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                    <form method="post" action="{% url 'excluir_usuario' administrador.id %}" class="action-inline" data-confirm-delete="true">
+                                    <form method="post" action="{% url 'excluir_usuario' administrador.id %}" data-api-url="/api/academia/administradores/{{ administrador.id }}/" data-method="DELETE" data-success-redirect="{% url 'listar_usuarios' %}" class="action-inline" data-confirm-delete="true">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                     </form>
@@ -78,7 +78,7 @@
                                 <td>{% if funcionario.is_active %}Ativo{% else %}Inativo{% endif %}</td>
                                 <td>
                                     <a href="{% url 'editar_usuario' funcionario.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                    <form method="post" action="{% url 'excluir_usuario' funcionario.id %}" class="action-inline" data-confirm-delete="true">
+                                    <form method="post" action="{% url 'excluir_usuario' funcionario.id %}" data-api-url="/api/academia/funcionarios/{{ funcionario.id }}/" data-method="DELETE" data-success-redirect="{% url 'listar_usuarios' %}" class="action-inline" data-confirm-delete="true">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                     </form>
@@ -117,7 +117,7 @@
                             <td>{% if aluno.is_active %}Ativo{% else %}Inativo{% endif %}</td>
                             <td>
                                 <a href="{% url 'editar_usuario' aluno.id %}" class="btn btn-warning btn-sm action-inline">Editar</a>
-                                <form method="post" action="{% url 'excluir_usuario' aluno.id %}" class="action-inline" data-confirm-delete="true">
+                                <form method="post" action="{% url 'excluir_usuario' aluno.id %}" data-api-url="/api/academia/alunos/{{ aluno.id }}/" data-method="DELETE" data-success-redirect="{% url 'listar_usuarios' %}" class="action-inline" data-confirm-delete="true">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-danger btn-sm">Excluir</button>
                                 </form>
