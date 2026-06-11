@@ -259,7 +259,6 @@ Endpoints JSON:
 
 ## Observações de segurança
 
-- Use `DEBUG=False` em produção.
 - Configure `ALLOWED_HOSTS` com domínios reais.
 - Não versione o arquivo `.env`.
 - Troque credenciais expostas antes de publicar o projeto.
